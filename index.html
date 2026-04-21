@@ -3,7 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>רגע קטן ❤️</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🏆</text></svg>">
+    <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect fill='%23E8A87C' width='100' height='100' rx='20'/><text x='50' y='65' text-anchor='middle' font-size='55'>🏆</text></svg>">
+    <meta name="apple-mobile-web-app-title" content="רגע קטן">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="theme-color" content="#FDF8F3">
+    <title>רגע קטן</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
         body { font-family: 'Segoe UI', 'Arial Hebrew', Arial, sans-serif; background: linear-gradient(180deg, #FDF8F3 0%, #F5EDE4 100%); min-height: 100vh; display: flex; justify-content: center; align-items: center; padding: 16px; color: #4A3728; }
@@ -46,12 +52,16 @@
         @keyframes confetti-fall { 0% { transform: translateY(-20px) rotate(0deg); opacity: 1; } 100% { transform: translateY(100vh) rotate(720deg); opacity: 0; } }
         .math-problem { font-size: 3rem; text-align: center; color: #5D4037; font-weight: 700; padding: 30px; background: white; border-radius: 24px; box-shadow: 0 4px 16px rgba(0,0,0,0.06); width: 100%; max-width: 340px; }
         .color-box { width: 120px; height: 120px; border-radius: 24px; box-shadow: 0 4px 16px rgba(0,0,0,0.1); margin: 0 auto; }
+        .progress-bar { width: 100%; max-width: 340px; height: 12px; background: #E0E0E0; border-radius: 6px; overflow: hidden; }
+        .progress-fill { height: 100%; background: linear-gradient(90deg, #E8A87C, #D4896A); border-radius: 6px; transition: width 0.3s ease; }
+        .progress-text { font-size: 1.1rem; color: #8D6E63; text-align: center; }
+        .streak-text { font-size: 1.2rem; color: #E8A87C; font-weight: 600; text-align: center; }
     </style>
 </head>
 <body>
     <div class="app-container">
         <div class="screen active" id="screen-gender">
-            <div class="heart">❤️</div>
+            <div class="heart">🏆</div>
             <h1>ברוכים הבאים<br>לרגע קטן</h1>
             <p class="subtitle">אפליקציה קטנה ונעימה — תרגיל אחד בכל יום</p>
             <p class="hint-text">מי את/ה?</p>
@@ -59,16 +69,16 @@
             <button class="btn btn-secondary gender-btn" onclick="selectGender('male')"><span class="emoji">👨</span><span>גבר</span></button>
         </div>
         <div class="screen" id="screen-onboarding">
-            <div class="heart">❤️</div>
+            <div class="heart">🏆</div>
             <h1 id="welcomeTitle">ברוכה הבאה<br>לרגע קטן</h1>
             <p class="subtitle" id="welcomeSubtitle">כאן תמצאי תרגיל קטן ונעים בכל יום,<br>ותשתפי את ההצלחה עם מי שאוהבים.</p>
             <p class="hint-text" id="welcomeHint">בואי נכיר אחת את השנייה — זה ייקח רגע אחד.</p>
-            <button class="btn btn-primary" onclick="showScreen('screen-name')">מתחילים ❤️</button>
+            <button class="btn btn-primary" onclick="showScreen('screen-name')">מתחילים 🏆</button>
         </div>
         <div class="screen" id="screen-name">
             <h2 id="nameQuestion">איך קוראים לך?</h2>
             <input type="text" class="input-field" id="userName" placeholder="הקלידי את שמך כאן" maxlength="20">
-            <button class="btn btn-primary" onclick="saveName()">הבא ❤️</button>
+            <button class="btn btn-primary" onclick="saveName()">הבא 🏆</button>
         </div>
         <div class="screen" id="screen-contacts">
             <h2 id="contactsTitle">מי הקרובים שלך?</h2>
@@ -82,12 +92,12 @@
             <p class="input-label" id="label3">אדם שלישי</p>
             <input type="text" class="input-field" id="contact3Name" placeholder="שם (למשל: דני)" maxlength="15">
             <input type="tel" class="input-field" id="contact3Phone" placeholder="מספר טלפון" maxlength="15">
-            <button class="btn btn-primary" onclick="saveContacts()">סיום ❤️</button>
+            <button class="btn btn-primary" onclick="saveContacts()">סיום 🏆</button>
         </div>
         <div class="screen" id="screen-home">
-            <div class="heart">❤️</div>
-            <h1 id="homeGreeting">שלום ❤️<br>רוצה רגע קטן לעצמך?</h1>
-            <button class="btn btn-primary" onclick="startExercise()">תרגיל קטן ✨</button>
+            <div class="heart">🏆</div>
+            <h1 id="homeGreeting">שלום 🏆<br>רוצה רגע קטן לעצמך?</h1>
+            <button class="btn btn-primary" onclick="startSession()">תרגיל קטן ✨</button>
             <button class="btn btn-secondary" onclick="showScreen('screen-contacts-edit')">עריכת קרובים 📝</button>
         </div>
         <div class="screen" id="screen-contacts-edit">
@@ -102,33 +112,38 @@
             <p class="input-label" id="editLabel3">אדם שלישי</p>
             <input type="text" class="input-field" id="editContact3Name" placeholder="שם" maxlength="15">
             <input type="tel" class="input-field" id="editContact3Phone" placeholder="מספר טלפון" maxlength="15">
-            <button class="btn btn-primary" onclick="updateContacts()">שמירה ❤️</button>
+            <button class="btn btn-primary" onclick="updateContacts()">שמירה 🏆</button>
             <button class="btn btn-back" onclick="showScreen('screen-home')">חזרה לבית</button>
         </div>
-        <div class="screen" id="screen-exercise-intro">
-            <div class="exercise-type-badge" id="exerciseTypeBadge">זיכרון</div>
-            <h2 id="exerciseIntroTitle">מוכנה?</h2>
-            <p class="subtitle" id="exerciseIntroText">עוד רגע תראי כמה דברים קטנים...</p>
-            <button class="btn btn-primary" id="startExerciseBtn" onclick="runExercise()">מתחילים!</button>
+        <div class="screen" id="screen-session-intro">
+            <div class="heart">🏆</div>
+            <h2 id="sessionIntroTitle">מוכנה?</h2>
+            <p class="subtitle" id="sessionIntroText">10 תרגילים קטנים ונעימים מחכים לך</p>
+            <p class="hint-text">אחרי כל תרגיל — עוברים אוטומטית לבא.<br>בסוף — תוכלי לשתף עם הקרובים!</p>
+            <button class="btn btn-primary" onclick="startNextExercise()">מתחילים! ✨</button>
             <button class="btn btn-back" onclick="showScreen('screen-home')">חזרה</button>
         </div>
         <div class="screen" id="screen-exercise-show">
-            <div class="timer-bar"><div class="timer-fill" id="timerFill"></div></div>
+            <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+            <p class="progress-text" id="progressText">תרגיל 1 מתוך 10</p>
             <div class="exercise-type-badge" id="showTypeBadge">זיכרון</div>
             <div id="showContent"></div>
         </div>
         <div class="screen" id="screen-exercise-question">
+            <div class="progress-bar"><div class="progress-fill" id="questionProgressFill"></div></div>
+            <p class="progress-text" id="questionProgressText">תרגיל 1 מתוך 10</p>
             <div class="exercise-type-badge" id="questionTypeBadge">זיכרון</div>
             <p class="question-text" id="questionText">מה ראית?</p>
             <div class="options-grid" id="optionsGrid"></div>
         </div>
-        <div class="screen" id="screen-success">
-            <div class="heart">❤️</div>
-            <p class="success-message" id="successText">כל הכבוד!</p>
-            <h2 id="successName">❤️</h2>
-            <p class="subtitle" id="successSubtitle">סיימת את התרגיל היום!<br>רוצה לשתף את השמחה?</p>
+        <div class="screen" id="screen-session-end">
+            <div class="heart">🏆</div>
+            <p class="success-message" id="sessionEndTitle">כל הכבוד!</p>
+            <h2 id="sessionEndName">🏆</h2>
+            <p class="streak-text" id="sessionScore">סיימת 10 תרגילים!</p>
+            <p class="subtitle">רוצה לשתף את ההצלחה עם הקרובים?</p>
             <div class="share-buttons" id="shareButtons"></div>
-            <button class="btn btn-pink" onclick="startExercise()">עוד תרגיל קטן ✨</button>
+            <button class="btn btn-pink" onclick="startSession()">עוד סדרה ✨</button>
             <button class="btn btn-back" onclick="showScreen('screen-home')">חזרה לבית</button>
         </div>
     </div>
@@ -147,29 +162,27 @@
                 contact1Placeholder: 'שם (למשל: רפאל)',
                 contact2Placeholder: 'שם (למשל: יעל)',
                 contact3Placeholder: 'שם (למשל: דני)',
-                homeGreeting: 'שלום {name} ❤️<br>רוצה רגע קטן לעצמך?',
+                homeGreeting: 'שלום {name} 🏆<br>רוצה רגע קטן לעצמך?',
                 editTitle: 'הקרובים שלי',
                 editHint: 'אפשר לשנות את השמות והמספרים בכל עת.',
                 editLabel1: 'אדם ראשון', editLabel2: 'אדם שני', editLabel3: 'אדם שלישי',
-                exerciseIntroTitle: 'מוכנה?',
-                exerciseIntroTextMemory: 'עוד רגע תראי כמה דברים קטנים...',
-                exerciseIntroTextMath: 'פתרי את החשבון הפשוט...',
-                exerciseIntroTextColor: 'זהרי את הצבע שתראי...',
-                startExerciseBtn: 'מתחילים!',
+                sessionIntroTitle: 'מוכנה?',
+                sessionIntroText: '10 תרגילים קטנים ונעימים מחכים לך',
+                progressText: 'תרגיל {current} מתוך {total}',
                 questionTextMemory: 'מה ראית?',
                 questionTextMath: 'מה התשובה?',
                 questionTextColor: 'איזה צבע זה?',
-                successText: 'כל הכבוד!',
-                successTextWrong: 'כל הכבוד על הניסיון!',
-                successSubtitle: 'סיימת את התרגיל היום!<br>רוצה לשתף את השמחה?',
+                sessionEndTitle: 'כל הכבוד!',
+                sessionScore: 'סיימת {total} תרגילים!',
+                successSubtitle: 'רוצה לשתף את ההצלחה עם הקרובים?',
                 shareBtnPrefix: 'שלחי ל',
-                anotherExercise: 'עוד תרגיל קטן ✨',
+                anotherSession: 'עוד סדרה ✨',
                 backHome: 'חזרה לבית',
                 back: 'חזרה',
-                save: 'שמירה ❤️',
-                finish: 'סיום ❤️',
-                next: 'הבא ❤️',
-                start: 'מתחילים ❤️',
+                save: 'שמירה 🏆',
+                finish: 'סיום 🏆',
+                next: 'הבא 🏆',
+                start: 'מתחילים 🏆',
                 editContacts: 'עריכת קרובים 📝',
                 smallExercise: 'תרגיל קטן ✨'
             },
@@ -185,72 +198,68 @@
                 contact1Placeholder: 'שם (למשל: רחל)',
                 contact2Placeholder: 'שם (למשל: דוד)',
                 contact3Placeholder: 'שם (למשל: שירה)',
-                homeGreeting: 'שלום {name} ❤️<br>רוצה רגע קטן לעצמך?',
+                homeGreeting: 'שלום {name} 🏆<br>רוצה רגע קטן לעצמך?',
                 editTitle: 'הקרובים שלי',
                 editHint: 'אפשר לשנות את השמות והמספרים בכל עת.',
                 editLabel1: 'אדם ראשון', editLabel2: 'אדם שני', editLabel3: 'אדם שלישי',
-                exerciseIntroTitle: 'מוכן?',
-                exerciseIntroTextMemory: 'עוד רגע תראה כמה דברים קטנים...',
-                exerciseIntroTextMath: 'פתור את החשבון הפשוט...',
-                exerciseIntroTextColor: 'זהר את הצבע שתראה...',
-                startExerciseBtn: 'מתחילים!',
+                sessionIntroTitle: 'מוכן?',
+                sessionIntroText: '10 תרגילים קטנים ונעימים מחכים לך',
+                progressText: 'תרגיל {current} מתוך {total}',
                 questionTextMemory: 'מה ראית?',
                 questionTextMath: 'מה התשובה?',
                 questionTextColor: 'איזה צבע זה?',
-                successText: 'כל הכבוד!',
-                successTextWrong: 'כל הכבוד על הניסיון!',
-                successSubtitle: 'סיימת את התרגיל היום!<br>רוצה לשתף את השמחה?',
+                sessionEndTitle: 'כל הכבוד!',
+                sessionScore: 'סיימת {total} תרגילים!',
+                successSubtitle: 'רוצה לשתף את ההצלחה עם הקרובים?',
                 shareBtnPrefix: 'שלח ל',
-                anotherExercise: 'עוד תרגיל קטן ✨',
+                anotherSession: 'עוד סדרה ✨',
                 backHome: 'חזרה לבית',
                 back: 'חזרה',
-                save: 'שמירה ❤️',
-                finish: 'סיום ❤️',
-                next: 'הבא ❤️',
-                start: 'מתחילים ❤️',
+                save: 'שמירה 🏆',
+                finish: 'סיום 🏆',
+                next: 'הבא 🏆',
+                start: 'מתחילים 🏆',
                 editContacts: 'עריכת קרובים 📝',
                 smallExercise: 'תרגיל קטן ✨'
             }
         };
         
         let userData = { gender: '', name: '', contacts: [{ name: '', phone: '' }, { name: '', phone: '' }, { name: '', phone: '' }] };
-        let currentExercise = null;
-        let currentExerciseType = '';
         let t = texts.female;
+        let session = [];
+        let currentExerciseIndex = 0;
+        const TOTAL_EXERCISES = 10;
         
-        const exercises = {
-            memory: {
-                name: 'זיכרון',
-                items: [
-                    { show: ['🍎', '🕯️', '📖'], question: 'memory', options: ['🍎 🕯️ 📖', '🍎 🕯️ 🎸', '🍊 🕯️ 📖', '🍎 📚 🕯️'], correct: 0 },
-                    { show: ['🌸', '☕', '🐱'], question: 'memory', options: ['🌸 ☕ 🐱', '🌸 ☕ 🐶', '🌺 ☕ 🐱', '🌸 🍵 🐱'], correct: 0 },
-                    { show: ['🎹', '🌙', '🍪'], question: 'memory', options: ['🎹 🌙 🍪', '🎹 🌙 🍩', '🎸 🌙 🍪', '🎹 ⭐ 🍪'], correct: 0 },
-                    { show: ['🕊️', '🍋', '🎁'], question: 'memory', options: ['🕊️ 🍋 🎁', '🕊️ 🍊 🎁', '🦋 🍋 🎁', '🕊️ 🍋 🎀'], correct: 0 },
-                    { show: ['🌿', '📷', '🍯'], question: 'memory', options: ['🌿 📷 🍯', '🌿 📷 🥛', '🍀 📷 🍯', '🌿 📱 🍯'], correct: 0 }
-                ]
-            },
-            math: {
-                name: 'חשבון קל',
-                items: [
-                    { show: '3 + 4 = ?', question: 'math', options: ['6', '7', '8', '5'], correct: 1 },
-                    { show: '5 + 2 = ?', question: 'math', options: ['6', '8', '7', '9'], correct: 2 },
-                    { show: '9 − 3 = ?', question: 'math', options: ['5', '7', '6', '4'], correct: 2 },
-                    { show: '2 + 6 = ?', question: 'math', options: ['7', '9', '8', '6'], correct: 2 },
-                    { show: '10 − 4 = ?', question: 'math', options: ['5', '7', '6', '4'], correct: 2 },
-                    { show: '4 + 5 = ?', question: 'math', options: ['8', '10', '9', '7'], correct: 2 }
-                ]
-            },
-            color: {
-                name: 'צבעים',
-                items: [
-                    { show: { color: '#E57373', name: 'אדום' }, question: 'color', options: ['כחול', 'ירוק', 'אדום', 'צהוב'], correct: 2 },
-                    { show: { color: '#64B5F6', name: 'כחול' }, question: 'color', options: ['כחול', 'סגול', 'ורוד', 'אפור'], correct: 0 },
-                    { show: { color: '#81C784', name: 'ירוק' }, question: 'color', options: ['צהוב', 'ירוק', 'כתום', 'חום'], correct: 1 },
-                    { show: { color: '#FFF176', name: 'צהוב' }, question: 'color', options: ['כתום', 'לבן', 'צהוב', 'קרם'], correct: 2 },
-                    { show: { color: '#BA68C8', name: 'סגול' }, question: 'color', options: ['ורוד', 'סגול', 'כחול', 'אדום'], correct: 1 },
-                    { show: { color: '#FFB74D', name: 'כתום' }, question: 'color', options: ['אדום', 'צהוב', 'חום', 'כתום'], correct: 3 }
-                ]
-            }
+        const allExercises = {
+            memory: [
+                { show: ['🍎', '🕯️', '📖'], question: 'memory', options: ['🍎 🕯️ 📖', '🍎 🕯️ 🎸', '🍊 🕯️ 📖', '🍎 📚 🕯️'], correct: 0 },
+                { show: ['🌸', '☕', '🐱'], question: 'memory', options: ['🌸 ☕ 🐱', '🌸 ☕ 🐶', '🌺 ☕ 🐱', '🌸 🍵 🐱'], correct: 0 },
+                { show: ['🎹', '🌙', '🍪'], question: 'memory', options: ['🎹 🌙 🍪', '🎹 🌙 🍩', '🎸 🌙 🍪', '🎹 ⭐ 🍪'], correct: 0 },
+                { show: ['🕊️', '🍋', '🎁'], question: 'memory', options: ['🕊️ 🍋 🎁', '🕊️ 🍊 🎁', '🦋 🍋 🎁', '🕊️ 🍋 🎀'], correct: 0 },
+                { show: ['🌿', '📷', '🍯'], question: 'memory', options: ['🌿 📷 🍯', '🌿 📷 🥛', '🍀 📷 🍯', '🌿 📱 🍯'], correct: 0 },
+                { show: ['🌹', '🍷', '🎂'], question: 'memory', options: ['🌹 🍷 🎂', '🌹 🍷 🍰', '🌺 🍷 🎂', '🌹 🍺 🎂'], correct: 0 },
+                { show: ['🦋', '🌻', '☂️'], question: 'memory', options: ['🦋 🌻 ☂️', '🦋 🌻 🌂', '🐝 🌻 ☂️', '🦋 🌼 ☂️'], correct: 0 }
+            ],
+            math: [
+                { show: '3 + 4 = ?', question: 'math', options: ['6', '7', '8', '5'], correct: 1 },
+                { show: '5 + 2 = ?', question: 'math', options: ['6', '8', '7', '9'], correct: 2 },
+                { show: '9 − 3 = ?', question: 'math', options: ['5', '7', '6', '4'], correct: 2 },
+                { show: '2 + 6 = ?', question: 'math', options: ['7', '9', '8', '6'], correct: 2 },
+                { show: '10 − 4 = ?', question: 'math', options: ['5', '7', '6', '4'], correct: 2 },
+                { show: '4 + 5 = ?', question: 'math', options: ['8', '10', '9', '7'], correct: 2 },
+                { show: '7 − 2 = ?', question: 'math', options: ['4', '6', '5', '3'], correct: 1 },
+                { show: '3 + 5 = ?', question: 'math', options: ['7', '9', '8', '6'], correct: 2 }
+            ],
+            color: [
+                { show: { color: '#E57373', name: 'אדום' }, question: 'color', options: ['כחול', 'ירוק', 'אדום', 'צהוב'], correct: 2 },
+                { show: { color: '#64B5F6', name: 'כחול' }, question: 'color', options: ['כחול', 'סגול', 'ורוד', 'אפור'], correct: 0 },
+                { show: { color: '#81C784', name: 'ירוק' }, question: 'color', options: ['צהוב', 'ירוק', 'כתום', 'חום'], correct: 1 },
+                { show: { color: '#FFF176', name: 'צהוב' }, question: 'color', options: ['כתום', 'לבן', 'צהוב', 'קרם'], correct: 2 },
+                { show: { color: '#BA68C8', name: 'סגול' }, question: 'color', options: ['ורוד', 'סגול', 'כחול', 'אדום'], correct: 1 },
+                { show: { color: '#FFB74D', name: 'כתום' }, question: 'color', options: ['אדום', 'צהוב', 'חום', 'כתום'], correct: 3 },
+                { show: { color: '#F06292', name: 'ורוד' }, question: 'color', options: ['אדום', 'ורוד', 'סגול', 'כתום'], correct: 1 },
+                { show: { color: '#4DD0E1', name: 'טורקיז' }, question: 'color', options: ['כחול', 'ירוק', 'טורקיז', 'אפור'], correct: 2 }
+            ]
         };
         
         function selectGender(gender) {
@@ -291,7 +300,7 @@
         
         function saveName() {
             const name = document.getElementById('userName').value.trim();
-            if (!name) { alert('נא להכניס שם ❤️'); return; }
+            if (!name) { alert('נא להכניס שם 🏆'); return; }
             userData.name = name;
             showScreen('screen-contacts');
         }
@@ -303,7 +312,7 @@
             const c2phone = document.getElementById('contact2Phone').value.trim();
             const c3name = document.getElementById('contact3Name').value.trim();
             const c3phone = document.getElementById('contact3Phone').value.trim();
-            if (!c1name && !c2name && !c3name) { alert('נא להכניס לפחות קרוב אחד ❤️'); return; }
+            if (!c1name && !c2name && !c3name) { alert('נא להכניס לפחות קרוב אחד 🏆'); return; }
             userData.contacts[0] = { name: c1name, phone: c1phone };
             userData.contacts[1] = { name: c2name, phone: c2phone };
             userData.contacts[2] = { name: c3name, phone: c3phone };
@@ -316,87 +325,121 @@
             userData.contacts[2] = { name: document.getElementById('editContact3Name').value.trim(), phone: document.getElementById('editContact3Phone').value.trim() };
             showScreen('screen-home');
         }
-        function startExercise() {
+        
+        function generateSession() {
+            session = [];
             const types = ['memory', 'math', 'color'];
-            currentExerciseType = types[Math.floor(Math.random() * types.length)];
-            const ex = exercises[currentExerciseType];
-            currentExercise = ex.items[Math.floor(Math.random() * ex.items.length)];
-            document.getElementById('exerciseTypeBadge').textContent = ex.name;
-            document.getElementById('exerciseIntroTitle').textContent = t.exerciseIntroTitle;
-            let introText = '';
-            if (currentExerciseType === 'memory') introText = t.exerciseIntroTextMemory;
-            else if (currentExerciseType === 'math') introText = t.exerciseIntroTextMath;
-            else introText = t.exerciseIntroTextColor;
-            document.getElementById('exerciseIntroText').textContent = introText;
-            document.getElementById('startExerciseBtn').textContent = t.startExerciseBtn;
-            showScreen('screen-exercise-intro');
+            for (let i = 0; i < TOTAL_EXERCISES; i++) {
+                const type = types[i % 3];
+                const items = allExercises[type];
+                const item = items[Math.floor(Math.random() * items.length)];
+                session.push({ ...item, type: type, typeName: type === 'memory' ? 'זיכרון' : type === 'math' ? 'חשבון קל' : 'צבעים' });
+            }
+            currentExerciseIndex = 0;
         }
         
-        function runExercise() {
-            const ex = exercises[currentExerciseType];
-            document.getElementById('showTypeBadge').textContent = ex.name;
-            const contentDiv = document.getElementById('showContent');
-            if (currentExerciseType === 'memory') {
-                contentDiv.innerHTML = `<div class="icon-display">${currentExercise.show.join(' ')}</div>`;
-            } else if (currentExerciseType === 'math') {
-                contentDiv.innerHTML = `<div class="math-problem">${currentExercise.show}</div>`;
-            } else if (currentExerciseType === 'color') {
-                contentDiv.innerHTML = `<div class="color-box" style="background:${currentExercise.show.color}"></div>`;
+        function startSession() {
+            generateSession();
+            document.getElementById('sessionIntroTitle').textContent = t.sessionIntroTitle;
+            document.getElementById('sessionIntroText').textContent = t.sessionIntroText;
+            showScreen('screen-session-intro');
+        }
+        
+        function updateProgress() {
+            const progress = ((currentExerciseIndex) / TOTAL_EXERCISES) * 100;
+            document.getElementById('progressFill').style.width = progress + '%';
+            document.getElementById('questionProgressFill').style.width = progress + '%';
+            const text = t.progressText.replace('{current}', currentExerciseIndex + 1).replace('{total}', TOTAL_EXERCISES);
+            document.getElementById('progressText').textContent = text;
+            document.getElementById('questionProgressText').textContent = text;
+        }
+        
+        function startNextExercise() {
+            if (currentExerciseIndex >= TOTAL_EXERCISES) {
+                showSessionEnd();
+                return;
             }
+            const ex = session[currentExerciseIndex];
+            document.getElementById('showTypeBadge').textContent = ex.typeName;
+            const contentDiv = document.getElementById('showContent');
+            
+            if (ex.type === 'memory') {
+                contentDiv.innerHTML = `<div class="icon-display">${ex.show.join(' ')}</div>`;
+            } else if (ex.type === 'math') {
+                contentDiv.innerHTML = `<div class="math-problem">${ex.show}</div>`;
+            } else if (ex.type === 'color') {
+                contentDiv.innerHTML = `<div class="color-box" style="background:${ex.show.color}"></div>`;
+            }
+            
+            updateProgress();
             showScreen('screen-exercise-show');
+            
             const timerFill = document.getElementById('timerFill');
             timerFill.style.width = '100%';
             timerFill.style.transition = 'width 3s linear';
             setTimeout(() => { timerFill.style.width = '0%'; }, 50);
-            setTimeout(() => { showQuestion(); }, 3200);
+            setTimeout(() => { showExerciseQuestion(); }, 3200);
         }
         
-        function showQuestion() {
-            const ex = exercises[currentExerciseType];
-            document.getElementById('questionTypeBadge').textContent = ex.name;
+        function showExerciseQuestion() {
+            const ex = session[currentExerciseIndex];
+            document.getElementById('questionTypeBadge').textContent = ex.typeName;
             let qText = '';
-            if (currentExercise.question === 'memory') qText = t.questionTextMemory;
-            else if (currentExercise.question === 'math') qText = t.questionTextMath;
+            if (ex.question === 'memory') qText = t.questionTextMemory;
+            else if (ex.question === 'math') qText = t.questionTextMath;
             else qText = t.questionTextColor;
             document.getElementById('questionText').textContent = qText;
+            
             const grid = document.getElementById('optionsGrid');
             grid.innerHTML = '';
-            currentExercise.options.forEach((opt, idx) => {
+            ex.options.forEach((opt, idx) => {
                 const btn = document.createElement('button');
                 btn.className = 'option-btn';
                 btn.textContent = opt;
-                btn.onclick = () => checkAnswer(idx, btn);
+                btn.onclick = () => checkAnswer(idx);
                 grid.appendChild(btn);
             });
+            
+            updateProgress();
             showScreen('screen-exercise-question');
         }
         
-        function checkAnswer(selectedIdx, btnElement) {
+        function checkAnswer(selectedIdx) {
+            const ex = session[currentExerciseIndex];
             const buttons = document.querySelectorAll('.option-btn');
             buttons.forEach((btn, idx) => {
                 btn.disabled = true;
-                if (idx === currentExercise.correct) btn.classList.add('correct');
-                else if (idx === selectedIdx && idx !== currentExercise.correct) btn.classList.add('wrong');
+                if (idx === ex.correct) btn.classList.add('correct');
+                else if (idx === selectedIdx && idx !== ex.correct) btn.classList.add('wrong');
             });
-            setTimeout(() => { showSuccess(selectedIdx !== currentExercise.correct); }, 1200);
+            
+            setTimeout(() => {
+                currentExerciseIndex++;
+                if (currentExerciseIndex >= TOTAL_EXERCISES) {
+                    showSessionEnd();
+                } else {
+                    startNextExercise();
+                }
+            }, 1200);
         }
         
-        function showSuccess(wasWrong = false) {
-            document.getElementById('successText').textContent = wasWrong ? t.successTextWrong : t.successText;
-            document.getElementById('successName').textContent = `${userData.name} ❤️`;
-            document.getElementById('successSubtitle').innerHTML = t.successSubtitle;
+        function showSessionEnd() {
+            document.getElementById('sessionEndTitle').textContent = t.sessionEndTitle;
+            document.getElementById('sessionEndName').textContent = `${userData.name} 🏆`;
+            document.getElementById('sessionScore').textContent = t.sessionScore.replace('{total}', TOTAL_EXERCISES);
+            
             const shareDiv = document.getElementById('shareButtons');
             shareDiv.innerHTML = '';
-            userData.contacts.forEach((contact, idx) => {
+            userData.contacts.forEach((contact) => {
                 if (contact.name && contact.phone) {
                     const btn = document.createElement('a');
                     btn.className = 'btn btn-whatsapp';
-                    btn.textContent = `${t.shareBtnPrefix}${contact.name} ❤️`;
+                    btn.textContent = `${t.shareBtnPrefix}${contact.name} 🏆`;
                     btn.style.textDecoration = 'none';
                     btn.style.display = 'block';
-                    const message = `היי ❤️ סיימתי תרגיל קטן היום`;
+                    const message = `היי 🏆 סיימתי ${TOTAL_EXERCISES} תרגילים היום!`;
                     const encodedMsg = encodeURIComponent(message);
-                    let phone = contact.phone.replace(/\D/g, '');
+                    let phone = contact.phone.replace(/[^0-9]/g, '');
                     if (phone.startsWith('0')) phone = '972' + phone.substring(1);
                     if (!phone.startsWith('972')) phone = '972' + phone;
                     btn.href = `https://wa.me/${phone}?text=${encodedMsg}`;
@@ -404,8 +447,9 @@
                     shareDiv.appendChild(btn);
                 }
             });
-            showScreen('screen-success');
-            if (!wasWrong) createConfetti();
+            
+            showScreen('screen-session-end');
+            createConfetti();
         }
         
         function createConfetti() {
@@ -430,6 +474,9 @@
                 if (e.key === 'Enter') saveName();
             });
         });
+    </script>
+</body>
+</html>
     </script>
 </body>
 </html>
