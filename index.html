@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>רגע קטן ❤️</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        body { font-family: 'Segoe UI', 'Arial Hebrew', Arial, sans-serif; background: linear-gradient(180deg, #FDF8F3 0%, #F5EDE4 100%); min-height: 100vh; display: flex; justify-content: center; align-items: center; padding: 16px; color: #4A3728; }
+        .app-container { width: 100%; max-width: 420px; min-height: 90vh; display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 24px; }
+        .screen { width: 100%; display: none; flex-direction: column; align-items: center; gap: 28px; animation: fadeIn 0.5s ease; }
+        .screen.active { display: flex; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        h1 { font-size: 2.2rem; text-align: center; line-height: 1.5; color: #5D4037; font-weight: 600; }
+        h2 { font-size: 1.8rem; text-align: center; color: #5D4037; font-weight: 600; }
+        .subtitle { font-size: 1.3rem; text-align: center; color: #8D6E63; line-height: 1.6; }
+        .btn { width: 100%; max-width: 340px; padding: 22px 32px; font-size: 1.4rem; font-weight: 600; border: none; border-radius: 24px; cursor: pointer; transition: all 0.2s ease; font-family: inherit; text-align: center; line-height: 1.4; }
+        .btn:active { transform: scale(0.97); }
+        .btn-primary { background: linear-gradient(135deg, #E8A87C 0%, #D4896A 100%); color: white; box-shadow: 0 6px 20px rgba(212, 137, 106, 0.35); }
+        .btn-secondary { background: linear-gradient(135deg, #A8D5BA 0%, #8BC9A3 100%); color: white; box-shadow: 0 6px 20px rgba(139, 201, 163, 0.35); }
+        .btn-whatsapp { background: linear-gradient(135deg, #25D366 0%, #128C7E 100%); color: white; box-shadow: 0 6px 20px rgba(37, 211, 102, 0.35); }
+        .btn-pink { background: linear-gradient(135deg, #F4A6C3 0%, #E890B0 100%); color: white; box-shadow: 0 6px 20px rgba(244, 166, 195, 0.35); }
+        .btn-back { background: #E0E0E0; color: #666; font-size: 1.1rem; padding: 14px 28px; max-width: 200px; }
+        .gender-btn { display: flex; flex-direction: column; align-items: center; gap: 12px; padding: 30px 40px; font-size: 1.5rem; }
+        .gender-btn .emoji { font-size: 3rem; }
+        .icon-display { font-size: 4rem; text-align: center; padding: 30px; background: white; border-radius: 24px; box-shadow: 0 4px 16px rgba(0,0,0,0.06); min-height: 140px; display: flex; align-items: center; justify-content: center; gap: 20px; width: 100%; max-width: 340px; }
+        .question-text { font-size: 1.6rem; text-align: center; color: #5D4037; font-weight: 600; }
+        .options-grid { display: flex; flex-direction: column; gap: 14px; width: 100%; max-width: 340px; }
+        .option-btn { width: 100%; padding: 20px 24px; font-size: 1.3rem; font-weight: 600; border: 3px solid #E8A87C; background: white; color: #5D4037; border-radius: 20px; cursor: pointer; transition: all 0.2s ease; font-family: inherit; text-align: center; }
+        .option-btn:active { transform: scale(0.97); }
+        .option-btn.correct { background: #A8D5BA; border-color: #8BC9A3; color: white; }
+        .option-btn.wrong { background: #EF9A9A; border-color: #E57373; color: white; }
+        .success-message { font-size: 2rem; text-align: center; color: #8BC9A3; font-weight: 700; }
+        .heart { font-size: 3rem; animation: pulse 1.5s infinite; }
+        @keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.15); } }
+        .input-field { width: 100%; max-width: 340px; padding: 20px 24px; font-size: 1.3rem; border: 3px solid #E8A87C; border-radius: 20px; background: white; color: #5D4037; font-family: inherit; text-align: right; outline: none; }
+        .input-field::placeholder { color: #BCAAA4; }
+        .input-label { font-size: 1.2rem; color: #8D6E63; text-align: right; width: 100%; max-width: 340px; margin-bottom: -16px; }
+        .hint-text { font-size: 1rem; color: #A1887F; text-align: center; max-width: 340px; line-height: 1.5; }
+        .timer-bar { width: 100%; max-width: 340px; height: 8px; background: #E0E0E0; border-radius: 4px; overflow: hidden; }
+        .timer-fill { height: 100%; background: linear-gradient(90deg, #E8A87C, #D4896A); border-radius: 4px; transition: width 0.1s linear; }
+        .exercise-type-badge { font-size: 1rem; color: #A1887F; background: white; padding: 8px 20px; border-radius: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
+        .share-buttons { display: flex; flex-direction: column; gap: 12px; width: 100%; max-width: 340px; }
+        .confetti { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 100; }
+        .confetti-piece { position: absolute; width: 10px; height: 10px; border-radius: 50%; animation: confetti-fall 2s ease-out forwards; }
+        @keyframes confetti-fall { 0% { transform: translateY(-20px) rotate(0deg); opacity: 1; } 100% { transform: translateY(100vh) rotate(720deg); opacity: 0; } }
+        .math-problem { font-size: 3rem; text-align: center; color: #5D4037; font-weight: 700; padding: 30px; background: white; border-radius: 24px; box-shadow: 0 4px 16px rgba(0,0,0,0.06); width: 100%; max-width: 340px; }
+        .color-box { width: 120px; height: 120px; border-radius: 24px; box-shadow: 0 4px 16px rgba(0,0,0,0.1); margin: 0 auto; }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <div class="screen active" id="screen-gender">
+            <div class="heart">❤️</div>
+            <h1>ברוכים הבאים<br>לרגע קטן</h1>
+            <p class="subtitle">אפליקציה קטנה ונעימה — תרגיל אחד בכל יום</p>
+            <p class="hint-text">מי את/ה?</p>
+            <button class="btn btn-primary gender-btn" onclick="selectGender('female')"><span class="emoji">👩</span><span>אישה</span></button>
+            <button class="btn btn-secondary gender-btn" onclick="selectGender('male')"><span class="emoji">👨</span><span>גבר</span></button>
+        </div>
+        <div class="screen" id="screen-onboarding">
+            <div class="heart">❤️</div>
+            <h1 id="welcomeTitle">ברוכה הבאה<br>לרגע קטן</h1>
+            <p class="subtitle" id="welcomeSubtitle">כאן תמצאי תרגיל קטן ונעים בכל יום,<br>ותשתפי את ההצלחה עם מי שאוהבים.</p>
+            <p class="hint-text" id="welcomeHint">בואי נכיר אחת את השנייה — זה ייקח רגע אחד.</p>
+            <button class="btn btn-primary" onclick="showScreen('screen-name')">מתחילים ❤️</button>
+        </div>
+        <div class="screen" id="screen-name">
+            <h2 id="nameQuestion">איך קוראים לך?</h2>
+            <input type="text" class="input-field" id="userName" placeholder="הקלידי את שמך כאן" maxlength="20">
+            <button class="btn btn-primary" onclick="saveName()">הבא ❤️</button>
+        </div>
+        <div class="screen" id="screen-contacts">
+            <h2 id="contactsTitle">מי הקרובים שלך?</h2>
+            <p class="hint-text" id="contactsHint">הוסיפי עד 3 אנשים שתרצי לשתף איתם את הרגע הקטן שלך.</p>
+            <p class="input-label" id="label1">אדם ראשון</p>
+            <input type="text" class="input-field" id="contact1Name" placeholder="שם (למשל: רפאל)" maxlength="15">
+            <input type="tel" class="input-field" id="contact1Phone" placeholder="מספר טלפון (למשל: 0501234567)" maxlength="15">
+            <p class="input-label" id="label2">אדם שני</p>
+            <input type="text" class="input-field" id="contact2Name" placeholder="שם (למשל: יעל)" maxlength="15">
+            <input type="tel" class="input-field" id="contact2Phone" placeholder="מספר טלפון" maxlength="15">
+            <p class="input-label" id="label3">אדם שלישי</p>
+            <input type="text" class="input-field" id="contact3Name" placeholder="שם (למשל: דני)" maxlength="15">
+            <input type="tel" class="input-field" id="contact3Phone" placeholder="מספר טלפון" maxlength="15">
+            <button class="btn btn-primary" onclick="saveContacts()">סיום ❤️</button>
+        </div>
+        <div class="screen" id="screen-home">
+            <div class="heart">❤️</div>
+            <h1 id="homeGreeting">שלום ❤️<br>רוצה רגע קטן לעצמך?</h1>
+            <button class="btn btn-primary" onclick="startExercise()">תרגיל קטן ✨</button>
+            <button class="btn btn-secondary" onclick="showScreen('screen-contacts-edit')">עריכת קרובים 📝</button>
+        </div>
+        <div class="screen" id="screen-contacts-edit">
+            <h2 id="editTitle">הקרובים שלי</h2>
+            <p class="hint-text" id="editHint">אפשר לשנות את השמות והמספרים בכל עת.</p>
+            <p class="input-label" id="editLabel1">אדם ראשון</p>
+            <input type="text" class="input-field" id="editContact1Name" placeholder="שם" maxlength="15">
+            <input type="tel" class="input-field" id="editContact1Phone" placeholder="מספר טלפון" maxlength="15">
+            <p class="input-label" id="editLabel2">אדם שני</p>
+            <input type="text" class="input-field" id="editContact2Name" placeholder="שם" maxlength="15">
+            <input type="tel" class="input-field" id="editContact2Phone" placeholder="מספר טלפון" maxlength="15">
+            <p class="input-label" id="editLabel3">אדם שלישי</p>
+            <input type="text" class="input-field" id="editContact3Name" placeholder="שם" maxlength="15">
+            <input type="tel" class="input-field" id="editContact3Phone" placeholder="מספר טלפון" maxlength="15">
+            <button class="btn btn-primary" onclick="updateContacts()">שמירה ❤️</button>
+            <button class="btn btn-back" onclick="showScreen('screen-home')">חזרה לבית</button>
+        </div>
+        <div class="screen" id="screen-exercise-intro">
+            <div class="exercise-type-badge" id="exerciseTypeBadge">זיכרון</div>
+            <h2 id="exerciseIntroTitle">מוכנה?</h2>
+            <p class="subtitle" id="exerciseIntroText">עוד רגע תראי כמה דברים קטנים...</p>
+            <button class="btn btn-primary" id="startExerciseBtn" onclick="runExercise()">מתחילים!</button>
+            <button class="btn btn-back" onclick="showScreen('screen-home')">חזרה</button>
+        </div>
+        <div class="screen" id="screen-exercise-show">
+            <div class="timer-bar"><div class="timer-fill" id="timerFill"></div></div>
+            <div class="exercise-type-badge" id="showTypeBadge">זיכרון</div>
+            <div id="showContent"></div>
+        </div>
+        <div class="screen" id="screen-exercise-question">
+            <div class="exercise-type-badge" id="questionTypeBadge">זיכרון</div>
+            <p class="question-text" id="questionText">מה ראית?</p>
+            <div class="options-grid" id="optionsGrid"></div>
+        </div>
+        <div class="screen" id="screen-success">
+            <div class="heart">❤️</div>
+            <p class="success-message" id="successText">כל הכבוד!</p>
+            <h2 id="successName">❤️</h2>
+            <p class="subtitle" id="successSubtitle">סיימת את התרגיל היום!<br>רוצה לשתף את השמחה?</p>
+            <div class="share-buttons" id="shareButtons"></div>
+            <button class="btn btn-pink" onclick="startExercise()">עוד תרגיל קטן ✨</button>
+            <button class="btn btn-back" onclick="showScreen('screen-home')">חזרה לבית</button>
+        </div>
+    </div>
+    <div class="confetti" id="confetti"></div>
+    <script>
+        const texts = {
+            female: {
+                welcomeTitle: 'ברוכה הבאה<br>לרגע קטן',
+                welcomeSubtitle: 'כאן תמצאי תרגיל קטן ונעים בכל יום,<br>ותשתפי את ההצלחה עם מי שאוהבים.',
+                welcomeHint: 'בואי נכיר אחת את השנייה — זה ייקח רגע אחד.',
+                nameQuestion: 'איך קוראים לך?',
+                namePlaceholder: 'הקלידי את שמך כאן',
+                contactsTitle: 'מי הקרובים שלך?',
+                contactsHint: 'הוסיפי עד 3 אנשים שתרצי לשתף איתם את הרגע הקטן שלך.',
+                label1: 'אדם ראשון', label2: 'אדם שני', label3: 'אדם שלישי',
+                contact1Placeholder: 'שם (למשל: רפאל)',
+                contact2Placeholder: 'שם (למשל: יעל)',
+                contact3Placeholder: 'שם (למשל: דני)',
+                homeGreeting: 'שלום {name} ❤️<br>רוצה רגע קטן לעצמך?',
+                editTitle: 'הקרובים שלי',
+                editHint: 'אפשר לשנות את השמות והמספרים בכל עת.',
+                editLabel1: 'אדם ראשון', editLabel2: 'אדם שני', editLabel3: 'אדם שלישי',
+                exerciseIntroTitle: 'מוכנה?',
+                exerciseIntroTextMemory: 'עוד רגע תראי כמה דברים קטנים...',
+                exerciseIntroTextMath: 'פתרי את החשבון הפשוט...',
+                exerciseIntroTextColor: 'זהרי את הצבע שתראי...',
+                startExerciseBtn: 'מתחילים!',
+                questionTextMemory: 'מה ראית?',
+                questionTextMath: 'מה התשובה?',
+                questionTextColor: 'איזה צבע זה?',
+                successText: 'כל הכבוד!',
+                successTextWrong: 'כל הכבוד על הניסיון!',
+                successSubtitle: 'סיימת את התרגיל היום!<br>רוצה לשתף את השמחה?',
+                shareBtnPrefix: 'שלחי ל',
+                anotherExercise: 'עוד תרגיל קטן ✨',
+                backHome: 'חזרה לבית',
+                back: 'חזרה',
+                save: 'שמירה ❤️',
+                finish: 'סיום ❤️',
+                next: 'הבא ❤️',
+                start: 'מתחילים ❤️',
+                editContacts: 'עריכת קרובים 📝',
+                smallExercise: 'תרגיל קטן ✨'
+            },
+            male: {
+                welcomeTitle: 'ברוך הבא<br>לרגע קטן',
+                welcomeSubtitle: 'כאן תמצא תרגיל קטן ונעים בכל יום,<br>ותשתף את ההצלחה עם מי שאוהבים.',
+                welcomeHint: 'בוא נכיר אחד את השני — זה ייקח רגע אחד.',
+                nameQuestion: 'איך קוראים לך?',
+                namePlaceholder: 'הקלד את שמך כאן',
+                contactsTitle: 'מי הקרובים שלך?',
+                contactsHint: 'הוסף עד 3 אנשים שתרצה לשתף איתם את הרגע הקטן שלך.',
+                label1: 'אדם ראשון', label2: 'אדם שני', label3: 'אדם שלישי',
+                contact1Placeholder: 'שם (למשל: רחל)',
+                contact2Placeholder: 'שם (למשל: דוד)',
+                contact3Placeholder: 'שם (למשל: שירה)',
+                homeGreeting: 'שלום {name} ❤️<br>רוצה רגע קטן לעצמך?',
+                editTitle: 'הקרובים שלי',
+                editHint: 'אפשר לשנות את השמות והמספרים בכל עת.',
+                editLabel1: 'אדם ראשון', editLabel2: 'אדם שני', editLabel3: 'אדם שלישי',
+                exerciseIntroTitle: 'מוכן?',
+                exerciseIntroTextMemory: 'עוד רגע תראה כמה דברים קטנים...',
+                exerciseIntroTextMath: 'פתור את החשבון הפשוט...',
+                exerciseIntroTextColor: 'זהר את הצבע שתראה...',
+                startExerciseBtn: 'מתחילים!',
+                questionTextMemory: 'מה ראית?',
+                questionTextMath: 'מה התשובה?',
+                questionTextColor: 'איזה צבע זה?',
+                successText: 'כל הכבוד!',
+                successTextWrong: 'כל הכבוד על הניסיון!',
+                successSubtitle: 'סיימת את התרגיל היום!<br>רוצה לשתף את השמחה?',
+                shareBtnPrefix: 'שלח ל',
+                anotherExercise: 'עוד תרגיל קטן ✨',
+                backHome: 'חזרה לבית',
+                back: 'חזרה',
+                save: 'שמירה ❤️',
+                finish: 'סיום ❤️',
+                next: 'הבא ❤️',
+                start: 'מתחילים ❤️',
+                editContacts: 'עריכת קרובים 📝',
+                smallExercise: 'תרגיל קטן ✨'
+            }
+        };
+        
+        let userData = { gender: '', name: '', contacts: [{ name: '', phone: '' }, { name: '', phone: '' }, { name: '', phone: '' }] };
+        let currentExercise = null;
+        let currentExerciseType = '';
+        let t = texts.female;
+        
+        const exercises = {
+            memory: {
+                name: 'זיכרון',
+                items: [
+                    { show: ['🍎', '🕯️', '📖'], question: 'memory', options: ['🍎 🕯️ 📖', '🍎 🕯️ 🎸', '🍊 🕯️ 📖', '🍎 📚 🕯️'], correct: 0 },
+                    { show: ['🌸', '☕', '🐱'], question: 'memory', options: ['🌸 ☕ 🐱', '🌸 ☕ 🐶', '🌺 ☕ 🐱', '🌸 🍵 🐱'], correct: 0 },
+                    { show: ['🎹', '🌙', '🍪'], question: 'memory', options: ['🎹 🌙 🍪', '🎹 🌙 🍩', '🎸 🌙 🍪', '🎹 ⭐ 🍪'], correct: 0 },
+                    { show: ['🕊️', '🍋', '🎁'], question: 'memory', options: ['🕊️ 🍋 🎁', '🕊️ 🍊 🎁', '🦋 🍋 🎁', '🕊️ 🍋 🎀'], correct: 0 },
+                    { show: ['🌿', '📷', '🍯'], question: 'memory', options: ['🌿 📷 🍯', '🌿 📷 🥛', '🍀 📷 🍯', '🌿 📱 🍯'], correct: 0 }
+                ]
+            },
+            math: {
+                name: 'חשבון קל',
+                items: [
+                    { show: '3 + 4 = ?', question: 'math', options: ['6', '7', '8', '5'], correct: 1 },
+                    { show: '5 + 2 = ?', question: 'math', options: ['6', '8', '7', '9'], correct: 2 },
+                    { show: '9 − 3 = ?', question: 'math', options: ['5', '7', '6', '4'], correct: 2 },
+                    { show: '2 + 6 = ?', question: 'math', options: ['7', '9', '8', '6'], correct: 2 },
+                    { show: '10 − 4 = ?', question: 'math', options: ['5', '7', '6', '4'], correct: 2 },
+                    { show: '4 + 5 = ?', question: 'math', options: ['8', '10', '9', '7'], correct: 2 }
+                ]
+            },
+            color: {
+                name: 'צבעים',
+                items: [
+                    { show: { color: '#E57373', name: 'אדום' }, question: 'color', options: ['כחול', 'ירוק', 'אדום', 'צהוב'], correct: 2 },
+                    { show: { color: '#64B5F6', name: 'כחול' }, question: 'color', options: ['כחול', 'סגול', 'ורוד', 'אפור'], correct: 0 },
+                    { show: { color: '#81C784', name: 'ירוק' }, question: 'color', options: ['צהוב', 'ירוק', 'כתום', 'חום'], correct: 1 },
+                    { show: { color: '#FFF176', name: 'צהוב' }, question: 'color', options: ['כתום', 'לבן', 'צהוב', 'קרם'], correct: 2 },
+                    { show: { color: '#BA68C8', name: 'סגול' }, question: 'color', options: ['ורוד', 'סגול', 'כחול', 'אדום'], correct: 1 },
+                    { show: { color: '#FFB74D', name: 'כתום' }, question: 'color', options: ['אדום', 'צהוב', 'חום', 'כתום'], correct: 3 }
+                ]
+            }
+        };
+        
+        function selectGender(gender) {
+            userData.gender = gender;
+            t = texts[gender];
+            updateAllTexts();
+            showScreen('screen-onboarding');
+        }
+        
+        function updateAllTexts() {
+            document.getElementById('welcomeTitle').innerHTML = t.welcomeTitle;
+            document.getElementById('welcomeSubtitle').innerHTML = t.welcomeSubtitle;
+            document.getElementById('welcomeHint').textContent = t.welcomeHint;
+            document.getElementById('nameQuestion').textContent = t.nameQuestion;
+            document.getElementById('userName').placeholder = t.namePlaceholder;
+            document.getElementById('contactsTitle').textContent = t.contactsTitle;
+            document.getElementById('contactsHint').textContent = t.contactsHint;
+            document.getElementById('label1').textContent = t.label1;
+            document.getElementById('label2').textContent = t.label2;
+            document.getElementById('label3').textContent = t.label3;
+            document.getElementById('contact1Name').placeholder = t.contact1Placeholder;
+            document.getElementById('contact2Name').placeholder = t.contact2Placeholder;
+            document.getElementById('contact3Name').placeholder = t.contact3Placeholder;
+            document.getElementById('editTitle').textContent = t.editTitle;
+            document.getElementById('editHint').textContent = t.editHint;
+            document.getElementById('editLabel1').textContent = t.editLabel1;
+            document.getElementById('editLabel2').textContent = t.editLabel2;
+            document.getElementById('editLabel3').textContent = t.editLabel3;
+        }
+        
+        function showScreen(screenId) {
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+            document.getElementById(screenId).classList.add('active');
+            if (screenId === 'screen-home' && userData.name) {
+                document.getElementById('homeGreeting').innerHTML = t.homeGreeting.replace('{name}', userData.name);
+            }
+        }
+        
+        function saveName() {
+            const name = document.getElementById('userName').value.trim();
+            if (!name) { alert('נא להכניס שם ❤️'); return; }
+            userData.name = name;
+            showScreen('screen-contacts');
+        }
+        
+        function saveContacts() {
+            const c1name = document.getElementById('contact1Name').value.trim();
+            const c1phone = document.getElementById('contact1Phone').value.trim();
+            const c2name = document.getElementById('contact2Name').value.trim();
+            const c2phone = document.getElementById('contact2Phone').value.trim();
+            const c3name = document.getElementById('contact3Name').value.trim();
+            const c3phone = document.getElementById('contact3Phone').value.trim();
+            if (!c1name && !c2name && !c3name) { alert('נא להכניס לפחות קרוב אחד ❤️'); return; }
+            userData.contacts[0] = { name: c1name, phone: c1phone };
+            userData.contacts[1] = { name: c2name, phone: c2phone };
+            userData.contacts[2] = { name: c3name, phone: c3phone };
+            showScreen('screen-home');
+        }
+        
+        function updateContacts() {
+            userData.contacts[0] = { name: document.getElementById('editContact1Name').value.trim(), phone: document.getElementById('editContact1Phone').value.trim() };
+            userData.contacts[1] = { name: document.getElementById('editContact2Name').value.trim(), phone: document.getElementById('editContact2Phone').value.trim() };
+            userData.contacts[2] = { name: document.getElementById('editContact3Name').value.trim(), phone: document.getElementById('editContact3Phone').value.trim() };
+            showScreen('screen-home');
+        }
+        function startExercise() {
+            const types = ['memory', 'math', 'color'];
+            currentExerciseType = types[Math.floor(Math.random() * types.length)];
+            const ex = exercises[currentExerciseType];
+            currentExercise = ex.items[Math.floor(Math.random() * ex.items.length)];
+            document.getElementById('exerciseTypeBadge').textContent = ex.name;
+            document.getElementById('exerciseIntroTitle').textContent = t.exerciseIntroTitle;
+            let introText = '';
+            if (currentExerciseType === 'memory') introText = t.exerciseIntroTextMemory;
+            else if (currentExerciseType === 'math') introText = t.exerciseIntroTextMath;
+            else introText = t.exerciseIntroTextColor;
+            document.getElementById('exerciseIntroText').textContent = introText;
+            document.getElementById('startExerciseBtn').textContent = t.startExerciseBtn;
+            showScreen('screen-exercise-intro');
+        }
+        
+        function runExercise() {
+            const ex = exercises[currentExerciseType];
+            document.getElementById('showTypeBadge').textContent = ex.name;
+            const contentDiv = document.getElementById('showContent');
+            if (currentExerciseType === 'memory') {
+                contentDiv.innerHTML = `<div class="icon-display">${currentExercise.show.join(' ')}</div>`;
+            } else if (currentExerciseType === 'math') {
+                contentDiv.innerHTML = `<div class="math-problem">${currentExercise.show}</div>`;
+            } else if (currentExerciseType === 'color') {
+                contentDiv.innerHTML = `<div class="color-box" style="background:${currentExercise.show.color}"></div>`;
+            }
+            showScreen('screen-exercise-show');
+            const timerFill = document.getElementById('timerFill');
+            timerFill.style.width = '100%';
+            timerFill.style.transition = 'width 3s linear';
+            setTimeout(() => { timerFill.style.width = '0%'; }, 50);
+            setTimeout(() => { showQuestion(); }, 3200);
+        }
+        
+        function showQuestion() {
+            const ex = exercises[currentExerciseType];
+            document.getElementById('questionTypeBadge').textContent = ex.name;
+            let qText = '';
+            if (currentExercise.question === 'memory') qText = t.questionTextMemory;
+            else if (currentExercise.question === 'math') qText = t.questionTextMath;
+            else qText = t.questionTextColor;
+            document.getElementById('questionText').textContent = qText;
+            const grid = document.getElementById('optionsGrid');
+            grid.innerHTML = '';
+            currentExercise.options.forEach((opt, idx) => {
+                const btn = document.createElement('button');
+                btn.className = 'option-btn';
+                btn.textContent = opt;
+                btn.onclick = () => checkAnswer(idx, btn);
+                grid.appendChild(btn);
+            });
+            showScreen('screen-exercise-question');
+        }
+        
+        function checkAnswer(selectedIdx, btnElement) {
+            const buttons = document.querySelectorAll('.option-btn');
+            buttons.forEach((btn, idx) => {
+                btn.disabled = true;
+                if (idx === currentExercise.correct) btn.classList.add('correct');
+                else if (idx === selectedIdx && idx !== currentExercise.correct) btn.classList.add('wrong');
+            });
+            setTimeout(() => { showSuccess(selectedIdx !== currentExercise.correct); }, 1200);
+        }
+        
+        function showSuccess(wasWrong = false) {
+            document.getElementById('successText').textContent = wasWrong ? t.successTextWrong : t.successText;
+            document.getElementById('successName').textContent = `${userData.name} ❤️`;
+            document.getElementById('successSubtitle').innerHTML = t.successSubtitle;
+            const shareDiv = document.getElementById('shareButtons');
+            shareDiv.innerHTML = '';
+            userData.contacts.forEach((contact, idx) => {
+                if (contact.name && contact.phone) {
+                    const btn = document.createElement('a');
+                    btn.className = 'btn btn-whatsapp';
+                    btn.textContent = `${t.shareBtnPrefix}${contact.name} ❤️`;
+                    btn.style.textDecoration = 'none';
+                    btn.style.display = 'block';
+                    const message = `היי ❤️ סיימתי תרגיל קטן היום`;
+                    const encodedMsg = encodeURIComponent(message);
+                    let phone = contact.phone.replace(/\D/g, '');
+                    if (phone.startsWith('0')) phone = '972' + phone.substring(1);
+                    if (!phone.startsWith('972')) phone = '972' + phone;
+                    btn.href = `https://wa.me/${phone}?text=${encodedMsg}`;
+                    btn.target = '_blank';
+                    shareDiv.appendChild(btn);
+                }
+            });
+            showScreen('screen-success');
+            if (!wasWrong) createConfetti();
+        }
+        
+        function createConfetti() {
+            const container = document.getElementById('confetti');
+            container.innerHTML = '';
+            const colors = ['#E8A87C', '#A8D5BA', '#F4A6C3', '#FFF176', '#64B5F6', '#81C784'];
+            for (let i = 0; i < 30; i++) {
+                const piece = document.createElement('div');
+                piece.className = 'confetti-piece';
+                piece.style.left = Math.random() * 100 + '%';
+                piece.style.background = colors[Math.floor(Math.random() * colors.length)];
+                piece.style.animationDelay = Math.random() * 1 + 's';
+                piece.style.width = (8 + Math.random() * 8) + 'px';
+                piece.style.height = piece.style.width;
+                container.appendChild(piece);
+            }
+            setTimeout(() => { container.innerHTML = ''; }, 3000);
+        }
+        
+        document.addEventListener('DOMContentLoaded', () => {
+            document.getElementById('userName').addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') saveName();
+            });
+        });
+    </script>
+</body>
+</html>
